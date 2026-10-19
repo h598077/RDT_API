@@ -7,11 +7,9 @@ services:
       - dtaas-rdt:/workspace/rdt    # 
     ports:
       - "8080:8080"
-    networks:
-      - dtaas_shared
-networks:
-  dtaas_shared:
-    external: true
+
+
+
 
 volumes:
   dtaas-rdt:
