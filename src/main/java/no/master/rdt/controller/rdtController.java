@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -17,6 +19,11 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 public class rdtController {
+
+
+    private static final Path SHARED_DIR = Paths.get("/workspace/rdt");
+
+
     /**
      * Get message from DTaaS
      *
@@ -30,8 +37,6 @@ public class rdtController {
         return "Test communication";
     }
 
-    private static final Path SHARED_DIR = Paths.get("/workspace/rdt");
-
 
     /**
      * Write to DTaaS
@@ -43,13 +48,35 @@ public class rdtController {
      */
     @PutMapping ("/write")
     public void writeFileToDTaaS(@RequestBody String body) throws IOException {
-        //  Spring writes  that Jupyter will see
+
 
         Path file = SHARED_DIR.resolve("spring-output.txt");
         Files.writeString(file, body);
 
     }
 
+
+    /**
+     * Get all filenames from DTaaS
+     *
+     *
+     *
+     * @return String filenames
+     *
+     */
+    @GetMapping("/names")
+    public String getFileNames() throws IOException {
+
+        List<String> fileNames;
+        try (var paths = Files.list(SHARED_DIR)) {
+            fileNames = paths
+                    .map(path -> path.getFileName().toString())
+                    .collect(Collectors.toList());
+        }
+
+
+        return String.join(",", fileNames);
+    }
 
 
 
