@@ -1,0 +1,18 @@
+services:
+  app1:
+    build: .
+    container_name: spring1
+    user: "0:0"
+    volumes:
+      - dtaas-rdt:/workspace/rdt    # 
+    ports:
+      - "8080:8080"
+    networks:
+      - dtaas_shared
+networks:
+  dtaas_shared:
+    external: true
+
+volumes:
+  dtaas-rdt:
+    external: true
